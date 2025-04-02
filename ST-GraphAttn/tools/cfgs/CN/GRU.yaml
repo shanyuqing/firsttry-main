@@ -1,0 +1,29 @@
+DATA_CONFIG:
+    DATASET: "CN"
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+    NUM_DAYS: 970
+    STRUC_THRESHOLD: 0.9
+    K: 2
+    MATRIX_FILE: "CN_struc_matrix.csv"
+
+
+MODEL:
+    NAME: 'GRU'
+    INPUT_DIM: 12
+    # HIDDEN_DIM: 125
+    HIDDEN_DIM: 128
+    OUTPUT_DIM: 1
+    NUM_NODES: 253
+    # NUM_LAYERS: 1
+    NUM_LAYERS: 2
+    # DROPOUT: 0.7185
+    DROPOUT: 0.5
+
+OPTIMIZATION:
+    # NUM_EPOCHS: 47
+    NUM_EPOCHS: 100
+    OPTIMIZER: adam
+    # LR: 0.0084
+    LR: 0.008
+    BATCH_SIZE: 253
+    

@@ -1,0 +1,29 @@
+DATA_CONFIG:
+    DATASET: 'StockNet' # str类型，数据集名称
+    # 有以下数据集可选
+    # __all__ = {
+    # 'StockNet': time series data,  
+    # 'US': time series data,  
+    # 'CN': time series data
+    # }
+    STRUC_MATRIX_DATA: "StockNet_struc_matrix.csv"
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+    
+
+
+MODEL:
+    NAME: 'ST-GraphAttn'  # str类型，模型名称
+    # 模型包含如下选择
+    #     __all__ = {
+    #     'ST-GraphAttn': ST-GraphAttn,  # MLP模型, 用于单个特征的截面混合
+    #     'GAT': GAT,
+    #     "GRU_GAT": GRU_GAT,
+    #     "GRU": GRU,
+    #     "LSTM_GAT": LSTM_GAT,
+    #     "LSTM": LSTM,
+    #     "RNN": RNN
+    # }
+
+OPTIMIZATION:
+    OPTIMIZER: adam
+    

@@ -1,0 +1,29 @@
+DATA_CONFIG:
+    DATASET: "StockNet"
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+    NUM_DAYS: 1257
+    STRUC_THRESHOLD: 0.3
+    K: 4
+    MATRIX_FILE: "StockNet_struc_matrix.csv"
+
+MODEL:
+    NAME: 'GAT'
+    INPUT_DIM: 15
+    # HIDDEN_DIM: 292
+    HIDDEN_DIM: 256
+    OUTPUT_DIM: 1
+    NUM_NODES: 81
+    # NUM_HEADS: 6
+    NUM_HEADS: 3
+    # DROPOUT: 0.7134
+    DROPOUT: 0.5
+    ALPHA: 0.2
+
+OPTIMIZATION:
+    # NUM_EPOCHS: 140
+    NUM_EPOCHS: 130
+    OPTIMIZER: adam
+    # LR: 0.0042
+    LR: 0.005
+    BATCH_SIZE: 81
+    

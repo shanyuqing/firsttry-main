@@ -1,0 +1,31 @@
+DATA_CONFIG:
+    DATASET: "US"
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+    NUM_DAYS: 1002
+    STRUC_THRESHOLD: 0.7
+    K: 6
+    MATRIX_FILE: "US_struc_matrix.csv"
+   
+
+MODEL:
+    NAME: 'GAT'
+    INPUT_DIM: 18
+    OUTPUT_DIM: 1
+    NUM_NODES: 110
+    # NUM_HEADS: 6
+    NUM_HEADS: 4
+    # HIDDEN_DIM: 97
+    HIDDEN_DIM: 256
+    # DROPOUT: 0.6335
+    DROPOUT: 0.5
+    ALPHA: 0.2
+  
+
+OPTIMIZATION:
+    # NUM_EPOCHS: 86
+    NUM_EPOCHS: 150
+    OPTIMIZER: adam
+    # LR: 0.0070
+    LR: 0.005
+    BATCH_SIZE: 110
+    

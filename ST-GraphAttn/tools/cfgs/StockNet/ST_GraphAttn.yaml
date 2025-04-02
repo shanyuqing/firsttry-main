@@ -1,0 +1,27 @@
+DATA_CONFIG:
+    DATASET: "StockNet"
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+    NUM_DAYS: 1257
+    STRUC_THRESHOLD: 0.3
+    K: 4
+    MATRIX_FILE: "StockNet_struc_matrix.csv"
+
+# 检查模型名称是否一致
+MODEL:
+    NAME: 'ST_GraphAttn'
+    INPUT_DIM: 15
+    HIDDEN_DIM1: 429
+    HIDDEN_DIM2: 342
+    HIDDEN_DIM3: 306
+    HIDDEN_DIM4: 212
+    OUTPUT_DIM: 1
+    NUM_NODES: 81
+    # DROPOUT: 0.2895
+    DROPOUT: 0.3
+
+OPTIMIZATION:
+    BATCH_SIZE: 81
+    NUM_EPOCHS: 31
+    OPTIMIZER: adam
+    # LR: 0.0063
+    LR: 0.006
