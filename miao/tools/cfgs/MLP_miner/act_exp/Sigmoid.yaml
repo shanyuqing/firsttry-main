@@ -1,0 +1,16 @@
+DATA_CONFIG:
+    DATASET: 'cs_dataset'
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+
+MODEL:
+    NAME: 'MLP_miner'
+    HIDDEN_DIM: 128
+    ACTIVATION: 'Sigmoid'
+
+OPTIMIZATION:
+    BATCH_SIZE: 512
+    NUM_EPOCHS: 200
+
+    OPTIMIZER: adam
+    LR: 0.0001
+

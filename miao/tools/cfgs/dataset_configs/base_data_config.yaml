@@ -1,0 +1,3 @@
+# DATA_PATH: '/root/autodl-tmp/'
+DATA_PATH: '/home/yuheng/datassd2_ln/crypto/dl_data/'
+RAW_DATA_PATH: '/home/yuheng/datassd2_ln/crypto/15minbar'

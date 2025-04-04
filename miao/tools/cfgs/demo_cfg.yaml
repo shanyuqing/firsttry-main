@@ -1,0 +1,40 @@
+DATA_CONFIG:
+    DATASET: 'stock_mix_data' # str类型，数据集名称
+    # 有以下数据集可选
+    # __all__ = {
+    # 'stock_mix_data': MultiFeatsDataset,  # 多特征截面数据，对应y是la240
+    # 'cs_dataset': CSDataset,  # 单特征截面数据，特征是 ema_return
+    # 'cs_dataset_la240': CSDataset,  # 仅用于检查模型结构有无错误，特征是 la240（未来数据）
+    # }
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+
+MODEL:
+    NAME: 'ModelName'  # str类型，模型名称
+    # 模型包含如下选择
+    #     __all__ = {
+    #     'MLP_miner': MLP_miner,  # MLP模型, 用于单个特征的截面混合
+    #     'SimpleFeatsMixer': SimpleFeatsMixer  # 简单对于特征的混合，后面接一个MLP
+    # }
+    HIDDEN_DIM: 128
+    ACTIVATION: 'tanh'  # str类型，激活函数名称
+    #  activation_map = {
+    #     'ReLU': nn.ReLU,
+    #     'Tanh': nn.Tanh,
+    #     'Hardtanh': nn.Hardtanh,
+    #     'Sigmoid': nn.Sigmoid,
+    #     'LeakyReLU': nn.LeakyReLU,
+    #     'ELU': nn.ELU,
+    #     'GELU': nn.GELU,
+    #     'Softmax': lambda: nn.Softmax(dim=1),  # 指定dim以避免错误
+    #     'Softplus': nn.Softplus,
+    #     'Hardshrink': nn.Hardshrink,
+    #     'Hardsigmoid': nn.Hardsigmoid,
+    #     'HardSwish': nn.Hardswish
+    # }
+
+OPTIMIZATION:
+    BATCH_SIZE: 512
+    NUM_EPOCHS: 100
+
+    OPTIMIZER: adam
+    LR: 0.0001

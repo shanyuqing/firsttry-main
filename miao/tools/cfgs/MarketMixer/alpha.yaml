@@ -1,0 +1,17 @@
+DATA_CONFIG:
+    DATASET: 'stock_mix_data'
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+
+MODEL:
+    NAME: 'MarketMixer'
+    HIDDEN_DIM: 16
+    MARKET_HIDDEN_DIM: 50
+
+OPTIMIZATION:
+    BATCH_SIZE: 128
+    NUM_EPOCHS: 100
+
+    OPTIMIZER: adam
+    LR: 0.0001
+    WEIGHT_DECAY: 0.01
+    MOMENTUM: 0.9

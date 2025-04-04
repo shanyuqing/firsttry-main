@@ -1,0 +1,15 @@
+DATA_CONFIG:
+    DATASET: 'stock_mix_data'
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+
+MODEL:
+    NAME: 'SimpleFeatsMixer'
+    HIDDEN_DIM: 128
+    ACTIVATION: 'HardSwish'
+
+OPTIMIZATION:
+    BATCH_SIZE: 128
+    NUM_EPOCHS: 300
+
+    OPTIMIZER: adam
+    LR: 0.0003
