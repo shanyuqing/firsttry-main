@@ -1,5 +1,6 @@
-from .models import ST_GraphAttn, GAT, GRU, GRU_GAT, LSTM, LSTM_GAT, RNN
+from .models import GAT, GRU, GRU_GAT, LSTM, LSTM_GAT, RNN
 from torch.nn import Module
+from .models_2 import ST_GraphAttn
 
 __all__ = {
     'ST_GraphAttn': ST_GraphAttn,

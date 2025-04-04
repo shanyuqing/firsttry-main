@@ -9,7 +9,7 @@ DATA_CONFIG:
 
 MODEL:
     NAME: 'GRU'
-    INPUT_DIM: 15
+    INPUT_DIM: 1
     OUTPUT_DIM: 1
     NUM_NODES: 81
     NUM_LAYERS: 3

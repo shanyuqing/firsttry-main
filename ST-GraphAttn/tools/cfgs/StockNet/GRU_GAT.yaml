@@ -8,7 +8,7 @@ DATA_CONFIG:
 
 MODEL:
     NAME: 'GRU_GAT'
-    INPUT_DIM: 15
+    INPUT_DIM: 1
     OUTPUT_DIM: 1
     NUM_NODES: 81
     # NUM_HEADS: 5

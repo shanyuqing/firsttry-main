@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from scipy.stats import spearmanr  
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -43,36 +44,40 @@ def calculate_metrics(list1, list2):
     return ic, rank_ic, icir, rankicir
 
 # 定义训练模型
-def train_model(model, optimizer, train_data, val_data, epochs, lr):
+def train_model(model, optimizer, train_data, val_data, epochs, lr, patience=10):
     print("Training...")
    
+    # 创建学习率调度器
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
+    
     # 创建一个列表来存储每个epoch的损失值
     loss_values = []
-    val_loss_values = []  # 存储验证集的损失
+    val_loss_values = []
     IC = []
+    
+    # 早停相关变量
+    best_val_loss = float('inf')
+    patience_counter = 0
+    best_model_state = None
 
     for epoch in range(epochs):
         model.train()
         epoch_loss = 0.0
-        epoch_ic = []  # 每个epoch记录的IC值列表
+        epoch_ic = []
+        
         for i in train_data:
             x, edge_index, edge_attr, y, fadj, sadj = i[0], i[1], i[2], i[3], i[4], i[5]
             y_pred = model(x=x, edge_index=edge_index, sadj=sadj, fadj=fadj)
             optimizer.zero_grad()
-            y=y.view(-1,1)
+            y = y.view(-1,1)
 
-            # 模型预测
-            # n = emb1.size(0)
             mse_loss = F.mse_loss(y_pred, y)
-            # loss_dep = (loss_dependence(emb1, com1, n) + loss_dependence(emb2, com2, n))/2
-            # loss_com = common_loss(com1,com2)
-            # loss = mse_loss + beta * loss_dep + theta * loss_com
             loss = mse_loss
             ic, rank_ic, icir, rankicir = calculate_metrics(y_pred, y)
             epoch_loss += loss.item()
 
             if not np.isnan(ic):
-                epoch_ic.append(ic)  # 记录每个batch的IC
+                epoch_ic.append(ic)
 
             loss.backward()
             optimizer.step()
@@ -80,20 +85,37 @@ def train_model(model, optimizer, train_data, val_data, epochs, lr):
         # 平均损失
         avg_loss = epoch_loss / len(train_data)
         loss_values.append(avg_loss)
+        
         # 验证集评估
         val_loss = evaluate_model(model, val_data)
         val_loss_values.append(val_loss)
+        
+        # 更新学习率
+        scheduler.step(val_loss)
+        
+        # 早停检查
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            patience_counter = 0
+            best_model_state = model.state_dict().copy()
+        else:
+            patience_counter += 1
+            
+        # 如果连续patience次验证损失没有改善，则早停
+        if patience_counter >= patience:
+            print(f'Early stopping triggered after {epoch + 1} epochs')
+            model.load_state_dict(best_model_state)
+            break
         
         # 计算每个epoch的IC平均值
         if epoch_ic:
             avg_ic = np.nanmean(epoch_ic)
         else:
             avg_ic = np.nan
-        IC.append(avg_ic)  # 将每个epoch的IC值添加到IC列表
-
-
-        # # 输出每个epoch的训练损失和验证损失
-        # print(f'Epoch {epoch + 1}/{epochs}, Training Loss: {avg_loss:.4f}, Validation Loss: {val_loss:.4f},IC: {avg_ic:.4f}')
+        IC.append(avg_ic)
+        
+        # 输出训练进度
+        print(f'Epoch {epoch + 1}/{epochs}, Training Loss: {avg_loss:.4f}, Validation Loss: {val_loss:.4f}, IC: {avg_ic:.4f}, LR: {optimizer.param_groups[0]["lr"]:.6f}')
         
     return loss_values, val_loss_values, IC
 

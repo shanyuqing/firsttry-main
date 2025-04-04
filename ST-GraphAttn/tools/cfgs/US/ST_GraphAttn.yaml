@@ -8,7 +8,7 @@ DATA_CONFIG:
 
 MODEL:
     NAME: 'ST_GraphAttn'
-    INPUT_DIM: 18
+    # INPUT_DIM: 18
     HIDDEN_DIM1: 125
     HIDDEN_DIM2: 260
     HIDDEN_DIM3: 193
@@ -17,6 +17,14 @@ MODEL:
     NUM_NODES: 110
     # DROPOUT: 0.8993
     DROPOUT: 0.9
+
+    # class Config:
+    INPUT_DIM: 1
+    # HIDDEN_DIM1: 32
+    # HIDDEN_DIM2: 64
+    # HIDDEN_DIM3: 64
+    # HIDDEN_DIM4: 32
+    LSTM_HIDDEN: 32
 
 OPTIMIZATION:
     BATCH_SIZE: 110

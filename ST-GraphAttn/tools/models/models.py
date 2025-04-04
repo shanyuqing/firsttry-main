@@ -205,10 +205,10 @@ class GRU_GAT(nn.Module):
     def forward(self, x, edge_index, sadj=None, fadj=None, **kwargs):
         # x: Node features (batch_size, seq_len, num_nodes, feature_dim)
         # edge_index: Graph connectivity (edge_index[0], edge_index[1])
-        
+        x = x.unsqueeze(-1)              
         # First, process through GRU (Time-series part)
         x, _ = self.gru(x)  # x: (batch_size, seq_len, hidden_size)
-       
+        x = x[:, -1, :]
         # GAT layer
         x = self.gat1(x, edge_index)
         x = torch.relu(x)
@@ -229,6 +229,7 @@ class GRU(nn.Module):
         self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x, sadj=None, fadj=None, edge_index=None, **kwargs):
+        x = x.unsqueeze(-1)
         out, _ = self.gru(x)
         # Take the output of the last time step
         out = self.fc(out)  
@@ -257,8 +258,9 @@ class LSTM_GAT(nn.Module):
         # edge_index: Graph connectivity (edge_index[0], edge_index[1])
         
         # First, process through LSTM (Time-series part)
-        x, _ = self.lstm(x)  
-        
+        x = x.unsqueeze(-1)
+        x, _ = self.lstm(x)               # [N, T, hidden]
+        x = x[:, -1, :]                         # [N, hidden] → 只取最后时间步作为特征
         # GAT layer
         x = self.gat1(x, edge_index)
         x = torch.relu(x)
@@ -278,6 +280,7 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x, sadj=None, fadj=None, edge_index=None, **kwargs):
+        x = x.unsqueeze(-1)
         out, _ = self.lstm(x)
         # Take the output of the last time step
         out = self.fc(out)  
@@ -295,7 +298,9 @@ class RNN(nn.Module):
         self.fc = nn.Linear(hidden_size, output_size)
 
     def forward(self, x, sadj=None, fadj=None, edge_index=None, **kwargs):
+        x = x.unsqueeze(-1)
         out, _ = self.rnn(x)
         # Take the output of the last time step
         out = self.fc(out) 
         return out
+    

@@ -8,7 +8,7 @@ DATA_CONFIG:
 
 MODEL:
     NAME: 'LSTM'
-    INPUT_DIM: 15
+    INPUT_DIM: 1
     OUTPUT_DIM: 1
     NUM_NODES: 81
     # NUM_LAYERS: 5
