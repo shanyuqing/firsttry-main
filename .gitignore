@@ -1,0 +1,11 @@
+# 忽略所有模型二进制文件
+**/*.bin
+**/*.pt
+**/*.ckpt
+**/*.pth
+
+# Python缓存和临时文件
+__pycache__/
+*.log
+*.tmp
+.ipynb_checkpoints/
