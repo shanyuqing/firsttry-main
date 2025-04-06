@@ -97,12 +97,22 @@ def main():
 
     # 测试模型
     y_pred, y_true, mse_loss, mae_loss, rmse_loss, mape_loss = test_model(model, test_data)
+    
+    # 计算评价指标
+    y_pred, y_true = [t.cpu() for t in y_pred], [t.cpu() for t in y_true]
+    ic, rank_ic, icir, rankicir = calculate_metrics(y_pred, y_true)
+    
     # 将测试指标写入csv文件
     losses_df = pd.DataFrame({
-        'Training Loss': loss_values,
-        'Validation Loss': val_loss_values,
-        'IC': IC_values
-    }, index=range(len(loss_values)))
+        'MSE Loss': [mse_loss],
+        'MAE Loss': [mae_loss],
+        'RMSE Loss': [rmse_loss],
+        "MAPE Loss": [mape_loss],
+        "IC": [ic],
+        "RANK IC": [rank_ic],
+        "ICIR": [icir],
+        "RANK ICIR": [rankicir]
+    }).round(8)
     losses_df.to_csv(output_dir / 'test_losses.csv', index=False)
     
     # 保存预测结果
@@ -124,13 +134,6 @@ def main():
             'config': cfg,
             'args': args
         }, ckpt_dir / 'model.pt')
-
-    # 输出评估指标
-    print(f"Test Results:")
-    print(f"MSE Loss: {mse_loss:.4f}")
-    print(f"MAE Loss: {mae_loss:.4f}")
-    print(f"RMSE Loss: {rmse_loss:.4f}")
-    print(f"MAPE Loss: {mape_loss:.4f}")
 
     # 保存训练历史
     history_df = pd.DataFrame({

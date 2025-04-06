@@ -1,0 +1,34 @@
+DATA_CONFIG:
+    DATASET: "US"
+    _BASE_CONFIG_: 'cfgs/dataset_configs/base_data_config.yaml'
+    NUM_DAYS: 1002
+    STRUC_THRESHOLD: 0.7
+    K: 6
+    MATRIX_FILE: "US_struc_matrix.csv"
+
+MODEL:
+    NAME: 'ST_GraphAttn_ablation_3'
+    # INPUT_DIM: 18
+    HIDDEN_DIM1: 125
+    HIDDEN_DIM2: 260
+    HIDDEN_DIM3: 193
+    HIDDEN_DIM4: 248
+    OUTPUT_DIM: 1
+    NUM_NODES: 110
+    # DROPOUT: 0.8993
+    DROPOUT: 0.9
+
+    # class Config:
+    INPUT_DIM: 1
+    # HIDDEN_DIM1: 32
+    # HIDDEN_DIM2: 64
+    # HIDDEN_DIM3: 64
+    # HIDDEN_DIM4: 32
+    LSTM_HIDDEN: 32
+
+OPTIMIZATION:
+    BATCH_SIZE: 110
+    NUM_EPOCHS: 38
+    OPTIMIZER: adam
+    # LR: 5.0050e-05
+    LR: 0.00005

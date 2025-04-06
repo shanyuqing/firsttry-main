@@ -1,6 +1,6 @@
 from .models import GAT, GRU, GRU_GAT, LSTM, LSTM_GAT, RNN
 from torch.nn import Module
-from .models_2 import ST_GraphAttn
+from .model_ablation import ST_GraphAttn, ST_GraphAttn_ablation_1, ST_GraphAttn_ablation_2, ST_GraphAttn_ablation_3, ST_GraphAttn_ablation_4, ST_GraphAttn_ablation_5
 
 __all__ = {
     'ST_GraphAttn': ST_GraphAttn,
@@ -9,7 +9,12 @@ __all__ = {
     'GRU_GAT': GRU_GAT,
     "LSTM": LSTM,
     "LSTM_GAT": LSTM_GAT,
-    "RNN": RNN
+    "RNN": RNN,
+    "ST_GraphAttn_ablation_1": ST_GraphAttn_ablation_1,
+    "ST_GraphAttn_ablation_2": ST_GraphAttn_ablation_2,
+    "ST_GraphAttn_ablation_3": ST_GraphAttn_ablation_3,
+    "ST_GraphAttn_ablation_4": ST_GraphAttn_ablation_4,
+    "ST_GraphAttn_ablation_5": ST_GraphAttn_ablation_5
 }
 
 

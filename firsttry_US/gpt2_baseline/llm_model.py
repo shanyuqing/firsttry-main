@@ -34,7 +34,8 @@ for company_idx in range(stock_prices.shape[0]):
         actual_next_value = stock_prices[company_idx, i+18]
 
         prompt = f"The stock price over the past 18 days was {', '.join(map(str, seq_data))}. What is the stock price going to be tomorrow?"
-        inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=60).to(device)
+        inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=60)
+        inputs = {k: v.to(device) for k, v in inputs.items()}
 
         with torch.no_grad():
             outputs = model_gpt2.generate(
@@ -50,6 +51,7 @@ for company_idx in range(stock_prices.shape[0]):
         match = re.search(r'\d+\.\d+', predicted_text)
         predicted_value = float(match.group()) if match else np.nan
 
+        total_samples += 1
         if np.isnan(predicted_value):
             num_failed += 1
             continue
@@ -57,21 +59,20 @@ for company_idx in range(stock_prices.shape[0]):
         X_seq_list.append(seq_data)
         X_llm_list.append(predicted_value)
         y_list.append(actual_next_value)
-        total_samples += 1
 
-print(f"\n❗GPT2 生成缺失率: {num_failed / (total_samples + num_failed) * 100:.2f}%")
+print(f"\n❗GPT2 生成缺失率: {num_failed / total_samples * 100:.2f}%")
 
 # 转换为张量
 X_seq = np.array(X_seq_list).reshape(-1, 18, 1)  # LSTM 输入
 X_llm = np.array(X_llm_list).reshape(-1, 1)      # GPT 预测值
 y = np.array(y_list)
 
-# 划分数据集
-X_train_seq, X_temp_seq, X_train_llm, X_temp_llm, y_train, y_temp = train_test_split(
-    X_seq, X_llm, y, test_size=0.4, random_state=42
+# 使用 sklearn 的 train_test_split 划分数据集
+X_temp_seq, X_test_seq, X_temp_llm, X_test_llm, y_temp, y_test = train_test_split(
+    X_seq, X_llm, y, test_size=0.2, random_state=42
 )
-X_val_seq, X_test_seq, X_val_llm, X_test_llm, y_val, y_test = train_test_split(
-    X_temp_seq, X_temp_llm, y_temp, test_size=0.5, random_state=42
+X_train_seq, X_val_seq, X_train_llm, X_val_llm, y_train, y_val = train_test_split(
+    X_temp_seq, X_temp_llm, y_temp, test_size=0.25, random_state=42  # 0.25 * 0.8 = 0.2
 )
 
 # 转换为 Tensor
@@ -133,7 +134,6 @@ y_test_np = y_test.cpu().numpy()
 mse = mean_squared_error(y_test_np, y_pred_test_np)
 mae = mean_absolute_error(y_test_np, y_pred_test_np)
 rmse = np.sqrt(mse)
-# 替换旧的 MAPE 计算方式
 non_zero_mask = y_test_np != 0
 mape = np.mean(np.abs((y_test_np[non_zero_mask] - y_pred_test_np[non_zero_mask]) / y_test_np[non_zero_mask])) * 100
 
@@ -143,12 +143,12 @@ print(f"MAE  : {mae:.4f}")
 print(f"RMSE : {rmse:.4f}")
 print(f"MAPE : {mape:.4f}%")
 
-# LSTM 提取了15天价格的时间序列特征
-# GPT2 基于自然语言 prompt 提前预测未来价格（作为先验提示）
-#模型融合这两者信息，进行最终股价回归预测
+# GPT2 生成缺失率: 0.00%
+# Epoch [20/40], Loss: 0.0046, Val Loss: 0.0055
+# Epoch [40/40], Loss: 0.0021, Val Loss: 0.0027
 
-# #✅ 测试完成！
-# MSE  : 0.0003
-# MAE  : 0.0121
-# RMSE : 0.0186
-# MAPE : 119.8570%
+# ✅ 测试完成！
+# MSE  : 0.0025
+# MAE  : 0.0156
+# RMSE : 0.0501
+# MAPE : 412.1514%
